@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - United College</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    background:#eef2f7;
+}
+
+/* HEADER */
+
+header{
+    background:#002147;
+    color:white;
+    padding:15px;
+}
+
+.header-container{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    width:70px;
+}
+
+/* NAV */
+
+nav{
+    background:#004080;
+    padding:10px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-right:20px;
+    font-weight:bold;
+}
+
+/* CONTAINER */
+
+.container{
+    width:80%;
+    margin:auto;
+    margin-top:30px;
+}
+
+/* CARD */
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:8px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+    margin-bottom:20px;
+}
+
+/* INPUT */
+
+input, textarea{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:4px;
+}
+
+/* BUTTON */
+
+button{
+    background:#004080;
+    color:white;
+    padding:10px 20px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#002147;
+}
+
+.logout{
+    float:right;
+    background:#c0392b;
+}
+
+.logout:hover{
+    background:#922b21;
+}
+
+/* NOTICE */
+
+.notice{
+    background:white;
+    padding:15px;
+    margin-top:10px;
+    border-left:5px solid #004080;
+    border-radius:5px;
+}
+
+.hidden{
+    display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-container">
+<img src="united_college_of_education_logo.jpg" class="logo">
+<div>
+<h2>United College of Engineering and Research</h2>
+<p>Admin Dashboard</p>
+</div>
+</div>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="#">Admin</a>
+</nav>
+
+<div class="container">
+
+<!-- LOGIN -->
+
+<div id="loginSection" class="card">
+
+<h2>Admin Login</h2>
+
+<input type="password" id="loginPassword" placeholder="Enter Admin Password">
+
+<button onclick="login()">Login</button>
+
+<p style="margin-top:10px;">
+<a href="#" onclick="showReset()">Forgot Password?</a>
+</p>
+
+</div>
+
+
+<!-- PASSWORD RESET -->
+
+<div id="resetSection" class="card hidden">
+
+<h2>Reset Password</h2>
+
+<input type="password" id="newPassword" placeholder="New Password">
+
+<button onclick="resetPassword()">Reset Password</button>
+
+</div>
+
+
+
+<!-- ADMIN PANEL -->
+
+<div id="adminPanel" class="hidden">
+
+<button class="logout" onclick="logout()">Logout</button>
+
+<div class="card">
+
+<h2>Add New Notice</h2>
+
+<form id="noticeForm">
+
+<input type="text" id="title" placeholder="Notice Title" required>
+
+<textarea id="message" rows="4" placeholder="Write notice..." required></textarea>
+
+<button type="submit">Add Notice</button>
+
+</form>
+
+</div>
+
+
+<div class="card">
+
+<h2>Notices</h2>
+
+<div id="noticeList"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* DEFAULT PASSWORD */
+
+if(!localStorage.getItem("adminPassword")){
+    localStorage.setItem("adminPassword","admin123");
+}
+
+/* LOGIN */
+
+function login(){
+
+const pass = document.getElementById("loginPassword").value;
+
+const savedPass = localStorage.getItem("adminPassword");
+
+if(pass === savedPass){
+
+document.getElementById("loginSection").style.display="none";
+document.getElementById("adminPanel").style.display="block";
+
+}else{
+
+alert("Wrong password");
+
+}
+
+}
+
+/* LOGOUT */
+
+function logout(){
+
+location.reload();
+
+}
+
+/* RESET PASSWORD UI */
+
+function showReset(){
+
+document.getElementById("loginSection").style.display="none";
+document.getElementById("resetSection").style.display="block";
+
+}
+
+/* RESET PASSWORD */
+
+function resetPassword(){
+
+const newPass = document.getElementById("newPassword").value;
+
+if(newPass.length < 4){
+
+alert("Password must be at least 4 characters");
+
+return;
+
+}
+
+localStorage.setItem("adminPassword",newPass);
+
+alert("Password updated!");
+
+location.reload();
+
+}
+
+/* NOTICE SYSTEM */
+
+const form = document.getElementById("noticeForm");
+const noticeList = document.getElementById("noticeList");
+
+form.addEventListener("submit", function(e){
+
+e.preventDefault();
+
+const title = document.getElementById("title").value;
+const message = document.getElementById("message").value;
+
+const noticeDiv = document.createElement("div");
+noticeDiv.className = "notice";
+
+noticeDiv.innerHTML = `
+<h3>${title}</h3>
+<p>${message}</p>
+`;
+
+noticeList.prepend(noticeDiv);
+
+form.reset();
+
+});
+
+</script>
+
+</body>
+</html>
